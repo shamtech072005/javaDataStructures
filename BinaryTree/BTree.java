@@ -62,6 +62,7 @@ void insertData(int val){
                     System.out.println("the value already Exists");
                 }else{
                     root = root.left;
+                    
                 }
             }
         }
