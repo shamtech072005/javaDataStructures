@@ -44,52 +44,79 @@ void insertData(int val){
     BTree newNode = new BTree(val);
     if (root==null){
         root=newNode;
-        System.out.println("sccessfully root was created");
+        System.out.println("successfully root was created");
     }else if(root.data==val){
         System.out.println("The root value already exists");
     }
     else
     {
-        while(val<root.data)
+        BTree curr = root;
+        while(val<curr.data || val>curr.data)
         {
-            if (root.left == null)
+            if (val < curr.data)
             {
-                root.left = newNode;
-                System.out.println("sccessfully added in left");
-                break;
-            }else{
-                if (root.data == val){
-                    System.out.println("the value already Exists");
-                }else{
-                    root = root.left;
-                    
+                if (curr.left == null)
+                {
+                    curr.left = newNode;
+                    System.out.println("the value of added in left");
+                    break;
+                }else
+                {
+                    curr = curr.left;
                 }
-            }
-        }
-
-        while(root.data < val){
-            if (root.right == null)
-            {
-                root.right = newNode;System.out.println("sccessfully added in right");
-                break;
+                
             }
             else
             {
-                if (root.data == val){
-                    System.out.println("the value already Exists");
+                if (curr.right == null)
+                {
+                    curr.right = newNode;
+                    System.out.println("the value of added in right");
+                    break;
                 }else{
-                    root = root.right;
+                    curr = curr.right;
                 }
+                
             }
         }
     }
 }
 
-void delete(int val){
-    if(root.data == val){
-        root=null;
-    }
+void delete(int val)
+{
+    BTree curr = root;
+
+    if(curr.data == val)
+    {   
+        if (curr.right != null)
+        {
+            curr = curr.right;
+            while(curr.left!=null)
+            {
+                curr = curr.left;
+                if (curr.left.left == null){
+                    root.data=curr.left.data;
+                    curr.left = null;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            curr = curr.left;
+            while(curr.right!=null)
+            {
+                curr = curr.right;
+                if (curr.right.right == null){
+                    root.data=curr.right.data;
+                    curr.right = null;
+                    break;
+                }
+            }
+        }
+    } 
 }
+
     
     
     public static void main(String[] args) {
