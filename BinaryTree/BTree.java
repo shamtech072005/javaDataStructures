@@ -82,45 +82,82 @@ void insertData(int val){
     }
 }
 
-void delete(int val)
-{
-    BTree curr = root;
+// void delete(int val)
+// {
+//     BTree curr = root;
+    
+    
+//     while(val != curr.data)
+//     {   
+//         if(val<curr.data)
+//         {
+//             curr = curr.left;
+//         }
+//         else
+//         {
+//             curr = curr.right;
+//         }
+//     }
+//     //no child
+//     if (curr.left == null && curr.right == null)
+//     {
+//        System.err.println("no child");  
+//     }
+//     //has one child
+//     else if (curr.left == null || curr.right == null) 
+//     {
+//         System.err.println("one child");  
+//     }
+//     //has two child
+//     else
+//     {
+//         System.err.println("two child");  
+//     }
+// } 
 
-    if(curr.data == val)
-    {   
-        if (curr.right != null)
+BTree delete(BTree root,int val){
+    if(root==null)
+    {
+        return null;
+    }
+    if(val<root.data)
+    {
+       root.left = delete(root.left,val);
+    }
+    else if(val>root.data) 
+    {
+        root.right = delete(root.right,val);
+    }
+    else
+    {
+        //value == root.data;
+        if(root.left==null && root.right == null)
         {
-            curr = curr.right;
-            while(curr.left!=null)
-            {
-                curr = curr.left;
-                if (curr.left.left == null){
-                    root.data=curr.left.data;
-                    curr.left = null;
-                    break;
-                }
-            }
+            return null;
+        }
+        else if (root.left == null && root.right!=null)
+        {
+            root = root.right;
+        }
+        else if (root.left != null)
+        {
+            root = root.left;
         }
         else
         {
-            curr = curr.left;
-            while(curr.right!=null)
-            {
-                curr = curr.right;
-                if (curr.right.right == null){
-                    root.data=curr.right.data;
-                    curr.right = null;
-                    break;
-                }
+            //handle two parent
+            if(root.right.left == null){
+                root.right.left = root.left;
+                root = root.right;
             }
         }
-    } 
-}
-
-    
+    }
+    return root;
+ }   
     
     public static void main(String[] args) {
         BinaryTree B1 = new BinaryTree();
+        
         int userInput;
         Scanner textFeild = new Scanner(System.in);
         do 
@@ -158,9 +195,9 @@ void delete(int val)
                 }
                 else
                 {
-                    System.out.print("Enter the insert value : ");
+                    System.out.print("Enter the delete value : ");
                     int deleteValue = textFeild.nextInt();
-                    B1.delete(deleteValue);
+                    root = B1.delete(root,deleteValue);    
                 }
                 break;
                 default:
