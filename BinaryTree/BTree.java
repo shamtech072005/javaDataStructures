@@ -18,6 +18,7 @@ class  BinaryTree{
 void inOrder(BTree root){
     if(root!=null){
         inOrder(root.left);
+        
         System.out.println(root.data);
         inOrder(root.right);
     }
@@ -82,42 +83,14 @@ void insertData(int val){
     }
 }
 
-// void delete(int val)
-// {
-//     BTree curr = root;
+ 
     
-    
-//     while(val != curr.data)
-//     {   
-//         if(val<curr.data)
-//         {
-//             curr = curr.left;
-//         }
-//         else
-//         {
-//             curr = curr.right;
-//         }
-//     }
-//     //no child
-//     if (curr.left == null && curr.right == null)
-//     {
-//        System.err.println("no child");  
-//     }
-//     //has one child
-//     else if (curr.left == null || curr.right == null) 
-//     {
-//         System.err.println("one child");  
-//     }
-//     //has two child
-//     else
-//     {
-//         System.err.println("two child");  
-//     }
-// } 
+
 
 BTree delete(BTree root,int val){
     if(root==null)
     {
+        System.err.println("the value does not exists");          
         return null;
     }
     if(val<root.data)
@@ -131,11 +104,7 @@ BTree delete(BTree root,int val){
     else
     {
         //value == root.data;
-        if(root.left==null && root.right == null)
-        {
-            return null;
-        }
-        else if (root.left == null && root.right!=null)
+        if (root.left == null)
         {
             root = root.right;
         }
@@ -146,15 +115,51 @@ BTree delete(BTree root,int val){
         else
         {
             //handle two parent
-            if(root.right.left == null){
-                root.right.left = root.left;
-                root = root.right;
-            }
+                    BTree tempNode = root.right;
+                    while(tempNode.left!=null)
+                    {
+                        tempNode = tempNode.left;
+                    }
+                    root.data = tempNode.data;
+                    delete(root.right, tempNode.data);
+            
         }
     }
     return root;
- }   
-    
+ } 
+ boolean search(int searchVal){
+    BTree temp = root;
+    if (temp.data < searchVal){
+        temp = temp.right;
+    }
+    else if(temp.data > searchVal)
+    {
+        temp = temp.left;
+    }
+    else
+    {
+        return true;
+    }
+    return  false;
+ }  
+void update(int newVal,int deleteVal)
+{
+    if (!search(deleteVal))
+    {
+        System.out.println("unable to update because old value not found");
+    }
+    else if(search(newVal))
+    {
+        System.out.println("unable to update because new value already exists");
+    }else{
+        delete(root, deleteVal);
+        insertData(newVal);
+        System.out.println("successfully updated");
+    }
+}
+//  BTree update(BTree root,val){
+//     return root;
+//  }
     public static void main(String[] args) {
         BinaryTree B1 = new BinaryTree();
         
@@ -168,7 +173,8 @@ BTree delete(BTree root,int val){
             System.out.println("3 -> Show Preorder");
             System.out.println("4 -> Show Postorder");
             System.out.println("5 -> Delete Data");
-            System.out.println("6 -> Exit");
+            System.out.println("6 -> Update");
+            System.out.println("7 -> Exit");
             System.out.print("Enter Your Option : ");
 
             userInput = textFeild.nextInt();
@@ -189,21 +195,30 @@ BTree delete(BTree root,int val){
                     B1.postOrder(root);
                     break;
                 case 5:
-                if(root==null)
-                {
-                    System.err.println("Root is empty");
-                }
-                else
-                {
+                        System.out.print("Enter the delete value : ");
+                        int deleteValue = textFeild.nextInt();
+                        root = B1.delete(root,deleteValue);    
+                    
+                    break;
+                case 6:
+                    System.out.print("Enter the update value : ");
+                    int newValue = textFeild.nextInt();
                     System.out.print("Enter the delete value : ");
-                    int deleteValue = textFeild.nextInt();
-                    root = B1.delete(root,deleteValue);    
-                }
-                break;
+                    int delValue = textFeild.nextInt();
+                    if(root==null)
+                    {
+                        B1.insertData(newValue);
+                        System.err.println("Go and create a tree first");
+                    }
+                    else{
+                        
+                        B1.update(newValue, delValue);
+                    }
+                    break;
                 default:
                     throw new AssertionError();
             }
-        } while (userInput!=6);
+        } while (userInput!=7);
 
         
         
