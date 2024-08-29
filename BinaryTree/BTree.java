@@ -1,11 +1,15 @@
 import java.util.Scanner;
 public class BTree{
     int data;
+    int height;
     BTree left;
     BTree right;
 
-    public BTree(int data){
-        this.data=data;
+
+    public BTree(int data)
+    {
+        this.data = data ;
+        this.height = 1;
     }
 }
 
@@ -19,7 +23,8 @@ void inOrder(BTree root){
     if(root!=null){
         inOrder(root.left);
         
-        System.out.println(root.data);
+        System.out.println("height of "+root.data+" is "+root.height);
+
         inOrder(root.right);
     }
 }
@@ -56,25 +61,39 @@ void insertData(int val){
         {
             if (val < curr.data)
             {
+                
                 if (curr.left == null)
                 {
+                    if(curr.right == null){
+                        curr.height++;
+                    }
                     curr.left = newNode;
                     System.out.println("the value of added in left");
                     break;
                 }else
                 {
+                    if(curr.right==null || root.left!=null && root.right!=null){
+                        curr.height++;
+                    }
                     curr = curr.left;
                 }
-                
             }
             else
             {
+                
                 if (curr.right == null)
                 {
+                    if(curr.left == null){
+                        curr.height++;
+                    }
                     curr.right = newNode;
                     System.out.println("the value of added in right");
                     break;
                 }else{
+                    if(curr.left==null || root.left!=null && root.right!=null){
+                        curr.height++;
+                    }
+                    
                     curr = curr.right;
                 }
                 
